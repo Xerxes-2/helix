@@ -1323,7 +1323,8 @@ fn load_theme_api(engine: &mut Engine, generate_sources: bool) {
         .register_fn("add-theme!", add_theme)
         .register_fn("theme-style", get_style)
         .register_fn("theme-set-style!", set_style)
-        .register_fn("string->color", string_to_color);
+        .register_fn("string->color", string_to_color)
+        .register_fn_with_ctx(CTX, "editor->current-theme", get_current_theme);
 
     if generate_sources {
         configure_lsp_builtins("themes", &module);
@@ -1390,6 +1391,10 @@ fn get_style(theme: &SteelTheme, name: SteelString) -> helix_view::theme::Style 
 
 fn set_style(theme: &mut SteelTheme, name: String, style: helix_view::theme::Style) {
     theme.0.set(name, style)
+}
+
+fn get_current_theme(cx: &mut Context) -> SteelTheme {
+    SteelTheme(cx.editor.theme.clone())
 }
 
 fn string_to_color(string: SteelString) -> Result<Color, anyhow::Error> {

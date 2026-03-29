@@ -168,6 +168,7 @@
 
 (provide hashmap->theme
          register-theme
+         editor->current-theme
          theme-style
          theme-set-style!
          string->color)
